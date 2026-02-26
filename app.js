@@ -3,15 +3,25 @@ const app = express();
 
 const cookieParser = require("cookie-parser");
 const path = require('path');
+const expressSession = require('express-session');
+const flash = require("connect-flash");
 
 const ownersRouter = require("./routes/ownersRouter");
 const usersRouter = require("./routes/usersRouter");
 const productsRouter = require("./routes/productsRouter");
 const index = require("./routes/index");
 
+
 require("dotenv").config();
 const db = require("./config/mongoose-connection");
 
+app.use(flash());
+app.use(expressSession({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,"public")));
